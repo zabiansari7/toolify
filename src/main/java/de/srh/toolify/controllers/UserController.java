@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import de.srh.toolify.dto.UserDto;
 import de.srh.toolify.entities.UserEntity;
 import de.srh.toolify.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("api/users")
+@Tag(name = "Users", description = "The User APIs for registration")
+@RequestMapping("/api/users")
 public class UserController {
 	
 	private final UserService userService;

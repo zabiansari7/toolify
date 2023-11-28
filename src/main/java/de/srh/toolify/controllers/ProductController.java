@@ -23,9 +23,11 @@ import de.srh.toolify.dto.ToolifyResponse;
 import de.srh.toolify.entities.ProductEntity;
 import de.srh.toolify.services.ProductService;
 import de.srh.toolify.validators.ProductUpdateValidator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Validated
 @RestController
+@Validated
+@Tag(name = "Products", description = "The Product APIs for admin")
 @RequestMapping("/admin/api/products")
 public class ProductController {
 	
@@ -63,6 +65,7 @@ public class ProductController {
 	}
 	
 	@PostMapping
+	//@ApiOperation(value = "Create a new product", notes = "Provide JSON request to create a product")
 	public ResponseEntity<ToolifyResponse> postProduct(@RequestBody final Map<String, Object> product) {
 		ProductEntity productEntity;
 		try {
