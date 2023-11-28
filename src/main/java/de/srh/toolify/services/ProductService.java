@@ -47,7 +47,7 @@ public class ProductService {
 		try {
 			CategoryEntity category = categoryRepository
 					.findByCategoryName(product.getCategory().getCategoryName())
-						.orElseThrow(() -> new ProductException(String.format("Category name %s not found in the Toolify list", product.getCategory().getCategoryName()), null));
+						.orElseThrow(() -> new ProductException(String.format("Category name '%s' not found in the Toolify list", product.getCategory().getCategoryName()), null));
 			product.setCategory(category);
 			return productRepository.saveAndFlush(product).getProductId();
 		} catch (Exception e) {

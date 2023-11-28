@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.srh.toolify.dto.ToolifyResponse;
 import de.srh.toolify.entities.ProductEntity;
 import de.srh.toolify.services.ProductService;
 import de.srh.toolify.validators.ProductUpdateValidator;
+import de.srh.toolify.validators.ValidatorUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -32,14 +30,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class ProductController {
 	
 	private final ProductService productService;
-	private final ObjectMapper mapper;
 	
 	@Autowired
-	public ProductController(ProductService productService, ObjectMapper mapper) {
-	
+	public ProductController(ProductService productService) {
 		this.productService = productService;
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-		this.mapper = mapper;
 	}
 	
 	@GetMapping(value = "/all")
@@ -69,7 +63,7 @@ public class ProductController {
 	public ResponseEntity<ToolifyResponse> postProduct(@RequestBody final Map<String, Object> product) {
 		ProductEntity productEntity;
 		try {
-			productEntity = mapper.convertValue(product, ProductEntity.class);
+			productEntity = (ProductEntity) ValidatorUtil.validate(product, ProductEntity.class);
 		} catch (Exception e) {
 			return new ResponseEntity<>(
 					new ToolifyResponse(
@@ -92,7 +86,7 @@ public class ProductController {
 	@PutMapping(value = "/{productId}")
 	public ResponseEntity<ToolifyResponse> editProductById(@PathVariable final Long productId, @RequestBody final Map<String, Object> productProps) {
 		try {
-			mapper.convertValue(productProps, ProductUpdateValidator.class);
+			ValidatorUtil.validate(productProps, ProductUpdateValidator.class);
 		} catch (Exception e) {
 			return new ResponseEntity<>(
 					new ToolifyResponse(
