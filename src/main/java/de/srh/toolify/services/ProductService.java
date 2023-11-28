@@ -1,5 +1,6 @@
 package de.srh.toolify.services;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,7 @@ public class ProductService {
 					.findByCategoryName(product.getCategory().getCategoryName())
 						.orElseThrow(() -> new ProductException(String.format("Category name '%s' not found in the Toolify list", product.getCategory().getCategoryName()), null));
 			product.setCategory(category);
+			product.setCreatedOn(Instant.now());
 			return productRepository.saveAndFlush(product).getProductId();
 		} catch (Exception e) {
 			e.printStackTrace();	
@@ -62,6 +64,7 @@ public class ProductService {
 			Long categoryId = Long.valueOf(productProps.get(CHANGED_CATEGORY_ID_KEY).toString());
 			CategoryEntity category = this.getCategoryById(categoryId);
 			existingProduct.setCategory(category);
+			existingProduct.setUpdatedOn(Instant.now());
 		}
 		mapper.map(productProps, existingProduct);
 		return productRepository.saveAndFlush(existingProduct).getProductId();

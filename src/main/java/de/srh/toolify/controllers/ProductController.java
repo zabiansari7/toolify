@@ -67,7 +67,7 @@ public class ProductController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(
 					new ToolifyResponse(
-							String.format(e.getMessage()), 
+							String.format(e.getCause().getLocalizedMessage()), 
 							400, 
 							HttpStatus.BAD_REQUEST
 					), 
@@ -99,7 +99,7 @@ public class ProductController {
 		Long newProductId = productService.updateProduct(productId, productProps);
 		return new ResponseEntity<>(
 				new ToolifyResponse(
-						String.format("Product with productId '%d' updated successfully.", newProductId), 
+						String.format("Product with productId '%d' updated successfully", newProductId), 
 						201, 
 						HttpStatus.CREATED
 				), 

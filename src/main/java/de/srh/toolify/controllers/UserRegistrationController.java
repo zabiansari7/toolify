@@ -7,12 +7,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.srh.toolify.dto.ToolifyResponse;
 import de.srh.toolify.entities.UserEntity;
-import de.srh.toolify.services.UserService;
+import de.srh.toolify.services.UserRegistrationService;
+import de.srh.toolify.validators.UserUpdateValidator;
 import de.srh.toolify.validators.ValidatorUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -22,23 +25,61 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/users")
 public class UserRegistrationController {
 	
-	private final UserService userService;
+	private final UserRegistrationService userRegistrationService;
 	
 	@Autowired
-	public UserRegistrationController(UserService userService) {
-		this.userService = userService;
+	public UserRegistrationController(UserRegistrationService userService) {
+		this.userRegistrationService = userService;
 	}
 	
-	@PostMapping
-	public ResponseEntity<UserEntity> registerUser(@RequestBody Map<String, Object> user){
+	@PostMapping(value = "/user")
+	public ResponseEntity<ToolifyResponse> registerUser(@RequestBody final Map<String, Object> user){
 		UserEntity userEntity;
 		try {
 			userEntity = (UserEntity) ValidatorUtil.validate(user, UserEntity.class);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			return new ResponseEntity<>(
+					new ToolifyResponse(
+							String.format(e.getMessage()), 
+							400, 
+							HttpStatus.BAD_REQUEST
+					), 
+					HttpStatus.BAD_REQUEST);
 		}
-		UserEntity addedUser = userService.saveUser(userEntity);
-		return new ResponseEntity<>(addedUser, HttpStatus.CREATED);
-	}	
+		String storedEmail = userRegistrationService.saveUser(userEntity);
+		return new ResponseEntity<>(
+				new ToolifyResponse(
+						String.format("New User with email '%s' created successfully", storedEmail), 
+						201, 
+						HttpStatus.CREATED
+				), 
+				HttpStatus.CREATED);
+	}
+	
+	@PutMapping(value = "/user")
+	public ResponseEntity<ToolifyResponse> editUserByEmail(@RequestBody final Map<String, Object> userProps) {
+		try {
+			ValidatorUtil.validate(userProps, UserUpdateValidator.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(
+					new ToolifyResponse(
+							String.format(e.getMessage()), 
+							400, 
+							HttpStatus.BAD_REQUEST
+					), 
+					HttpStatus.BAD_REQUEST);
+		}
+		System.out.println("USERRRRRRR ::::: " + userProps.get("email").toString());
+		String updatedUserEmail = userRegistrationService.updateUserByEmail(userProps);
+		return new ResponseEntity<>(
+				new ToolifyResponse(
+						String.format("User with email '%s' updated successfully", updatedUserEmail), 
+						201, 
+						HttpStatus.CREATED
+				), 
+				HttpStatus.CREATED);
+	}
 	
 }

@@ -1,5 +1,7 @@
 package de.srh.toolify.entities;
 
+import java.time.Instant;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,6 +46,15 @@ public class UserEntity {
 	
 	@Column(name = "defaultCity")
 	private String defaultCity;
+	
+	@Column(name = "createdOn", columnDefinition = "datetime")
+	private Instant createdOn;
+	
+	@Column(name = "updateOn", columnDefinition = "datetime")
+	private Instant updateOn;
+	
+	@Column(name = "deletedOn", columnDefinition = "datetime")
+	private Instant deletedOn;
 	
 	public Long getUserId() {
 		return userId;
@@ -131,6 +142,30 @@ public class UserEntity {
 
 	public void setDefaultCity(String defaultCity) {
 		this.defaultCity = defaultCity;
+	}
+
+	public Instant getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Instant createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Instant getUpdatedOn() {
+		return updateOn;
+	}
+
+	public void setUpdatedOn(Instant updateOn) {
+		this.updateOn = updateOn;
+	}
+
+	public Instant getDeletedOn() {
+		return deletedOn;
+	}
+
+	public void setDeletedOn(Instant deletedOn) {
+		this.deletedOn = deletedOn;
 	}
     
 }

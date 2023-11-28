@@ -1,5 +1,7 @@
 package de.srh.toolify.entities;
 
+import java.time.Instant;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -22,6 +24,15 @@ public class CategoryEntity {
 	
     @Column(name = "categoryName", nullable = false, length = 255)
     private String categoryName;
+    
+    @Column(name = "createdOn", columnDefinition = "datetime")
+	private Instant createdOn;
+	
+	@Column(name = "updatedOn", columnDefinition = "datetime")
+	private Instant updatedOn;
+	
+	@Column(name = "deletedOn", columnDefinition = "datetime")
+	private Instant deletedOn;
 
 	public Long getCategoryId() {
 		return categoryId;
@@ -37,6 +48,30 @@ public class CategoryEntity {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
-	}    
+	}
+
+	public Instant getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Instant createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Instant getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Instant updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public Instant getDeletedOn() {
+		return deletedOn;
+	}
+
+	public void setDeletedOn(Instant deletedOn) {
+		this.deletedOn = deletedOn;
+	}
     
 }

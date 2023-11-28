@@ -15,6 +15,6 @@ public class UserExceptionAdvice {
 	@ExceptionHandler(UserException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	ToolifyResponse userBadRequestExceptionHandler(UserException ex) {
-		return new ToolifyResponse(ex.getCause().getLocalizedMessage(), 400, HttpStatus.BAD_REQUEST);
+		return new ToolifyResponse(ex.getMessage(), 400, HttpStatus.BAD_REQUEST);
 	}
 }
