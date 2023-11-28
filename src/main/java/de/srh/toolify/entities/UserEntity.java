@@ -29,7 +29,22 @@ public class UserEntity {
 	
 	@Column(name = "isAdmin", columnDefinition = "bit")
     private Boolean isAdmin;
-
+	
+	@Column(name = "mobile")
+	private String mobile;
+	
+	@Column(name = "defaultStreetName")
+	private String defaultStreetName;
+	
+	@Column(name = "defaultStreetNumber", columnDefinition = "int")
+	private String defaultStreetNumber;
+	
+	@Column(name = "defaultPincode", columnDefinition = "bigint")
+	private Long  defaultPincode;
+	
+	@Column(name = "defaultCity")
+	private String defaultCity;
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -76,6 +91,46 @@ public class UserEntity {
 
 	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getDefaultStreetName() {
+		return defaultStreetName;
+	}
+
+	public void setDefaultStreetName(String defaultStreetName) {
+		this.defaultStreetName = defaultStreetName;
+	}
+
+	public String getDefaultStreetNumber() {
+		return defaultStreetNumber;
+	}
+
+	public void setDefaultStreetNumber(String defaultStreetNumber) {
+		this.defaultStreetNumber = defaultStreetNumber;
+	}
+
+	public Long getDefaultPincode() {
+		return defaultPincode;
+	}
+
+	public void setDefaultPincode(Long defaultPincode) {
+		this.defaultPincode = defaultPincode;
+	}
+
+	public String getDefaultCity() {
+		return defaultCity;
+	}
+
+	public void setDefaultCity(String defaultCity) {
+		this.defaultCity = defaultCity;
 	}
     
 }

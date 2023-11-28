@@ -22,43 +22,43 @@ public class ProductEntity {
     @Column(name = "productId", columnDefinition = "int")
 	@JsonIgnore
     private Long productId;
-
+	
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
+    
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-
+    
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "manufacturer", length = 255)
     private String manufacturer;
-
+    
     @Column(name = "voltage", length = 50)
     private String voltage;
 
     @Column(name = "productDimensions", length = 255)
     private String productDimensions;
-
+    
     @Column(name = "itemWeight", precision = 10, scale = 2)
     private BigDecimal itemWeight;
 
     @Column(name = "bodyMaterial", length = 255)
     private String bodyMaterial;
-
+    
     @Column(name = "itemModelNumber", length = 50)
     private String itemModelNumber;
-
+    
     @Column(name = "design", length = 50)
     private String design;
 
     @Column(name = "colour", length = 50)
     private String colour;
-
+    
     @Column(name = "batteriesRequired", length = 25)
     private String batteriesRequired;
 

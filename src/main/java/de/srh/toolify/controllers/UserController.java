@@ -13,7 +13,7 @@ import de.srh.toolify.entities.UserEntity;
 import de.srh.toolify.services.UserService;
 
 @RestController
-@RequestMapping("/admin/api/users")
+@RequestMapping("api/users")
 public class UserController {
 	
 	private final UserService userService;
@@ -23,7 +23,7 @@ public class UserController {
 		this.userService = userService;
 	}
 	
-	@PostMapping("/add")
+	@PostMapping
 	public ResponseEntity<UserEntity> addUser(@RequestBody UserDto userDto){
 		UserEntity addedUser = userService.saveUser(userDto);
 		return new ResponseEntity<>(addedUser, HttpStatus.CREATED);

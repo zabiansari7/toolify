@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class ProductController {
 		this.productService = productService;
 	}
 	
-	@GetMapping
+	@GetMapping(value = "/all")
 	public ResponseEntity<List<ProductEntity>> getAllProducts(){
 		try {
 			List<ProductEntity> products = productService.getAllProducts();
@@ -42,7 +43,7 @@ public class ProductController {
 		}	
 	}
 	
-	@GetMapping(value = "{productId}")
+	@GetMapping(value = "/{productId}")
 	public ResponseEntity<ProductEntity> getProductByProductId(@PathVariable final Long productId){
 		try {
 			ProductEntity product = productService.getProductByProductId(productId);
@@ -65,12 +66,24 @@ public class ProductController {
 				HttpStatus.CREATED);
 	}
 	
-	@PutMapping(value = "{productId}")
+	@PutMapping(value = "/{productId}")
 	public ResponseEntity<ToolifyResponse> editProductById(@PathVariable final Long productId, @RequestBody final Map<String, Object> productProps) {
 		Long newProductId = productService.updateProduct(productId, productProps);
 		return new ResponseEntity<>(
 				new ToolifyResponse(
 						String.format("Product with productId '%d' updated successfully.", newProductId), 
+						201, 
+						HttpStatus.CREATED
+				), 
+				HttpStatus.CREATED);
+	}
+	
+	@DeleteMapping(value = "/{productId}")
+	public ResponseEntity<ToolifyResponse> deleteProduct(@PathVariable final Long productId) {
+		productService.deleteProduct(productId);
+		return new ResponseEntity<>(
+				new ToolifyResponse(
+						String.format("Product with productId '%d' has been deleted successfully.", productId), 
 						201, 
 						HttpStatus.CREATED
 				), 

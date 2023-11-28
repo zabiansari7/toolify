@@ -3,6 +3,7 @@ package de.srh.toolify.services;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -37,6 +38,7 @@ public class ProductService {
     }
 	
 	public ProductEntity getProductByProductId(Long productId) {
+		LOGGER.log(Level.INFO, String.format("Product with productId %d is being fetched", productId));
 		return productRepository.findById(productId)
 				.orElseThrow(() -> new ProductException(String.format("Product not found by productId %d", productId), null));
 	}
@@ -64,6 +66,11 @@ public class ProductService {
 		mapper.map(productProps, existingProduct);
 		return productRepository.saveAndFlush(existingProduct).getProductId();
 		
+	}
+	
+	public void deleteProduct(Long productId) {
+		ProductEntity existingProduct = this.getProductByProductId(productId);
+		productRepository.delete(existingProduct);
 	}
 	
 	private CategoryEntity getCategoryById(Long id) {
