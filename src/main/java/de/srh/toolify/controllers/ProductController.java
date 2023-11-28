@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.srh.toolify.dto.ToolifyResponse;
 import de.srh.toolify.entities.ProductEntity;
 import de.srh.toolify.services.ProductService;
+import de.srh.toolify.validators.ProductUpdateValidator;
 
 @Validated
 @RestController
@@ -26,10 +30,14 @@ import de.srh.toolify.services.ProductService;
 public class ProductController {
 	
 	private final ProductService productService;
+	private final ObjectMapper mapper;
 	
 	@Autowired
-	public ProductController(ProductService productService) {
+	public ProductController(ProductService productService, ObjectMapper mapper) {
+	
 		this.productService = productService;
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+		this.mapper = mapper;
 	}
 	
 	@GetMapping(value = "/all")
@@ -55,8 +63,20 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ToolifyResponse> postProduct(@RequestBody final ProductEntity product) {
-		Long newProductId = productService.saveProduct(product);
+	public ResponseEntity<ToolifyResponse> postProduct(@RequestBody final Map<String, Object> product) {
+		ProductEntity productEntity;
+		try {
+			productEntity = mapper.convertValue(product, ProductEntity.class);
+		} catch (Exception e) {
+			return new ResponseEntity<>(
+					new ToolifyResponse(
+							String.format(e.getMessage()), 
+							400, 
+							HttpStatus.BAD_REQUEST
+					), 
+					HttpStatus.BAD_REQUEST);
+		}
+		Long newProductId = productService.saveProduct(productEntity);
 		return new ResponseEntity<>(
 				new ToolifyResponse(
 						String.format("New Product with productId '%d' created successfully.", newProductId), 
@@ -68,6 +88,17 @@ public class ProductController {
 	
 	@PutMapping(value = "/{productId}")
 	public ResponseEntity<ToolifyResponse> editProductById(@PathVariable final Long productId, @RequestBody final Map<String, Object> productProps) {
+		try {
+			mapper.convertValue(productProps, ProductUpdateValidator.class);
+		} catch (Exception e) {
+			return new ResponseEntity<>(
+					new ToolifyResponse(
+							String.format(e.getMessage()), 
+							400, 
+							HttpStatus.BAD_REQUEST
+					), 
+					HttpStatus.BAD_REQUEST);
+		}
 		Long newProductId = productService.updateProduct(productId, productProps);
 		return new ResponseEntity<>(
 				new ToolifyResponse(
