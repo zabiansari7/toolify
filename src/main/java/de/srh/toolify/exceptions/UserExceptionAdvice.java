@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import de.srh.toolify.dto.ToolifyResponse;
 
 @ControllerAdvice
-public class ProductExceptionAdvice {
+public class UserExceptionAdvice {
 	
 	@ResponseBody
-	@ExceptionHandler(ProductException.class)
+	@ExceptionHandler(UserException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	ToolifyResponse procductBadRequestExceptionHandler(ProductException ex) {
+	ToolifyResponse userBadRequestExceptionHandler(UserException ex) {
 		return new ToolifyResponse(ex.getCause().getLocalizedMessage(), 400, HttpStatus.BAD_REQUEST);
 	}
 }
