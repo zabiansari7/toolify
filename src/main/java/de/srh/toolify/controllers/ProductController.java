@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.srh.toolify.dto.ToolifyResponse;
 import de.srh.toolify.entities.ProductEntity;
 import de.srh.toolify.services.ProductService;
-import de.srh.toolify.validators.ProductUpdateValidator;
+import de.srh.toolify.validators.ProductPropsValidator;
 import de.srh.toolify.validators.ValidatorUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -86,7 +86,7 @@ public class ProductController {
 	@PutMapping(value = "/{productId}")
 	public ResponseEntity<ToolifyResponse> editProductById(@PathVariable final Long productId, @RequestBody final Map<String, Object> productProps) {
 		try {
-			ValidatorUtil.validate(productProps, ProductUpdateValidator.class);
+			ValidatorUtil.validate(productProps, ProductPropsValidator.class);
 		} catch (Exception e) {
 			return new ResponseEntity<>(
 					new ToolifyResponse(

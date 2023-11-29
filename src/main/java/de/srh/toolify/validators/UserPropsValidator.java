@@ -1,6 +1,6 @@
 package de.srh.toolify.validators;
 
-public class UserUpdateValidator {
+public class UserPropsValidator {
 	
 	private String firstname;
 	private String lastname;

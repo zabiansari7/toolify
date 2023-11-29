@@ -24,11 +24,18 @@ public class SecurityConfig {
 			.csrf((csrf) -> csrf.disable())
 			.authorizeHttpRequests(auth -> {
 				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/v2/api-docs")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/ui")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-resources/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/security")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN")
-					.anyRequest().hasRole("USER");
+					.anyRequest().permitAll();
 				//auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN");
 			})
-			.formLogin(form -> form.loginPage("/login").permitAll())
+			.formLogin(form -> form.loginPage("http://localhost:8081/login").permitAll())
 			.build();
 	}
 

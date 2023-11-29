@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import de.srh.toolify.dto.ToolifyResponse;
 import de.srh.toolify.entities.UserEntity;
 import de.srh.toolify.services.UserRegistrationService;
-import de.srh.toolify.validators.UserUpdateValidator;
+import de.srh.toolify.validators.UserPropsValidator;
 import de.srh.toolify.validators.ValidatorUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @Validated
 @Tag(name = "Users", description = "The User APIs for registration")
-@RequestMapping("/api/users")
+@RequestMapping("/public/api/users")
 public class UserRegistrationController {
 	
 	private final UserRegistrationService userRegistrationService;
@@ -60,7 +60,7 @@ public class UserRegistrationController {
 	@PutMapping(value = "/user")
 	public ResponseEntity<ToolifyResponse> editUserByEmail(@RequestBody final Map<String, Object> userProps) {
 		try {
-			ValidatorUtil.validate(userProps, UserUpdateValidator.class);
+			ValidatorUtil.validate(userProps, UserPropsValidator.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(

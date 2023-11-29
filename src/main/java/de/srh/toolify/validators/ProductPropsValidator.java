@@ -2,7 +2,7 @@ package de.srh.toolify.validators;
 
 import java.math.BigDecimal;
 
-public class ProductUpdateValidator {
+public class ProductPropsValidator {
     private String name;
     private String description;
     private BigDecimal price;

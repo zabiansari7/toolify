@@ -29,8 +29,8 @@ public class UserEntity {
 	@Column(name = "password")
     private String password;
 	
-	@Column(name = "isAdmin", columnDefinition = "bit")
-    private Boolean isAdmin;
+	@Column(name = "hasRole")
+    private String hasRole;
 	
 	@Column(name = "mobile")
 	private String mobile;
@@ -50,8 +50,8 @@ public class UserEntity {
 	@Column(name = "createdOn", columnDefinition = "datetime")
 	private Instant createdOn;
 	
-	@Column(name = "updateOn", columnDefinition = "datetime")
-	private Instant updateOn;
+	@Column(name = "updatedOn", columnDefinition = "datetime")
+	private Instant updatedOn;
 	
 	@Column(name = "deletedOn", columnDefinition = "datetime")
 	private Instant deletedOn;
@@ -96,12 +96,12 @@ public class UserEntity {
 		this.password = password;
 	}
 
-	public Boolean getIsAdmin() {
-		return isAdmin;
+	public String getHasRole() {
+		return hasRole;
 	}
 
-	public void setIsAdmin(Boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setHasRole(String hasRole) {
+		this.hasRole = hasRole;
 	}
 
 	public String getMobile() {
@@ -153,11 +153,11 @@ public class UserEntity {
 	}
 
 	public Instant getUpdatedOn() {
-		return updateOn;
+		return updatedOn;
 	}
 
-	public void setUpdatedOn(Instant updateOn) {
-		this.updateOn = updateOn;
+	public void setUpdatedOn(Instant updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 
 	public Instant getDeletedOn() {
