@@ -30,8 +30,13 @@ public class UserRegistrationService {
 
 	public String saveUser(UserEntity user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setHasRole("DEFAULT");
 		user.setCreatedOn(Instant.now());
-		return userRepository.saveAndFlush(user).getEmail();
+		try {
+			return userRepository.saveAndFlush(user).getEmail();
+		} catch (Exception e) {
+			throw new UserException(e.getCause().getLocalizedMessage(), e);
+		}
 	}
 	
 	public String updateUserByEmail(Map<String, Object> userProps) {

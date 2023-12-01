@@ -167,5 +167,13 @@ public class UserEntity {
 	public void setDeletedOn(Instant deletedOn) {
 		this.deletedOn = deletedOn;
 	}
-    
+
+	@Override
+	public String toString() {
+		return "UserEntity [userId=" + userId + ", firstname=" + firstname + ", lastname=" + lastname + ", email="
+				+ email + ", password=" + password + ", hasRole=" + hasRole + ", mobile=" + mobile
+				+ ", defaultStreetName=" + defaultStreetName + ", defaultStreetNumber=" + defaultStreetNumber
+				+ ", defaultPincode=" + defaultPincode + ", defaultCity=" + defaultCity + ", createdOn=" + createdOn
+				+ ", updatedOn=" + updatedOn + ", deletedOn=" + deletedOn + "]";
+	}
 }

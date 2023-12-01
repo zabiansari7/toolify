@@ -17,4 +17,5 @@ public class UserExceptionAdvice {
 	ToolifyResponse userBadRequestExceptionHandler(UserException ex) {
 		return new ToolifyResponse(ex.getMessage(), 400, HttpStatus.BAD_REQUEST);
 	}
+	
 }
