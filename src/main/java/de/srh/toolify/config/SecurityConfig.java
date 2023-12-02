@@ -23,7 +23,7 @@ public class SecurityConfig {
 		return httpSecurity
 			.csrf((csrf) -> csrf.disable())
 			.authorizeHttpRequests(auth -> {
-				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).permitAll()
+				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/v2/api-docs")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/ui")).permitAll()
@@ -31,7 +31,7 @@ public class SecurityConfig {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/security")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN")
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).permitAll()
 					.anyRequest().permitAll();
 				//auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN");
 			})
