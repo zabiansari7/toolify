@@ -19,6 +19,7 @@ import de.srh.toolify.services.UserRegistrationService;
 import de.srh.toolify.validators.UserPropsValidator;
 import de.srh.toolify.validators.ValidatorUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 @Validated
@@ -46,8 +47,8 @@ public class UserRegistrationController {
 		return new ResponseEntity<>(new ToolifyResponse(String.format("New User with email '%s' created successfully", storedEmail), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}
 	
-	@PutMapping(value = "/user/{email}")
-	public ResponseEntity<ToolifyResponse> editUserByEmail(@RequestBody final Map<String, Object> userProps, @PathVariable final String email) {
+	@PutMapping(value = "/user", params = "email")
+	public ResponseEntity<ToolifyResponse> editUserByEmail(@RequestBody final Map<String, Object> userProps, @PathParam(value = "email") final String email) {
 		try {
 			ValidatorUtil.validate(userProps, UserPropsValidator.class);
 		} catch (Exception e) {
