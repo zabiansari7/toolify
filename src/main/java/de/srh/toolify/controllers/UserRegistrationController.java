@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,47 +40,22 @@ public class UserRegistrationController {
 			userEntity = (UserEntity) ValidatorUtil.validate(user, UserEntity.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(
-					new ToolifyResponse(
-							String.format(e.getMessage()), 
-							400, 
-							HttpStatus.BAD_REQUEST
-					), 
-					HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ToolifyResponse(String.format(e.getMessage()), 400, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
 		}
 		String storedEmail = userRegistrationService.saveUser(userEntity);
-		return new ResponseEntity<>(
-				new ToolifyResponse(
-						String.format("New User with email '%s' created successfully", storedEmail), 
-						201, 
-						HttpStatus.CREATED
-				), 
-				HttpStatus.CREATED);
+		return new ResponseEntity<>(new ToolifyResponse(String.format("New User with email '%s' created successfully", storedEmail), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}
 	
-	@PutMapping(value = "/user")
-	public ResponseEntity<ToolifyResponse> editUserByEmail(@RequestBody final Map<String, Object> userProps) {
+	@PutMapping(value = "/user/{email}")
+	public ResponseEntity<ToolifyResponse> editUserByEmail(@RequestBody final Map<String, Object> userProps, @PathVariable final String email) {
 		try {
 			ValidatorUtil.validate(userProps, UserPropsValidator.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(
-					new ToolifyResponse(
-							String.format(e.getMessage()), 
-							400, 
-							HttpStatus.BAD_REQUEST
-					), 
-					HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new ToolifyResponse(String.format(e.getMessage()), 400, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
 		}
-		System.out.println("USERRRRRRR ::::: " + userProps.get("email").toString());
-		String updatedUserEmail = userRegistrationService.updateUserByEmail(userProps);
-		return new ResponseEntity<>(
-				new ToolifyResponse(
-						String.format("User with email '%s' updated successfully", updatedUserEmail), 
-						201, 
-						HttpStatus.CREATED
-				), 
-				HttpStatus.CREATED);
+		String updatedUserEmail = userRegistrationService.updateUserByEmail(userProps, email);
+		return new ResponseEntity<>(new ToolifyResponse(String.format("User with email '%s' updated successfully", updatedUserEmail), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}
 	
 }

@@ -39,8 +39,7 @@ public class UserRegistrationService {
 		}
 	}
 	
-	public String updateUserByEmail(Map<String, Object> userProps) {
-		String email = userProps.get("email").toString();
+	public String updateUserByEmail(Map<String, Object> userProps, String email) {
 		UserEntity existingUser = userRepository.findByEmail(email)
 			.orElseThrow(() -> new UserException(String.format("User with email '%s' not found", email), null));
 		existingUser.setUpdatedOn(Instant.now());
