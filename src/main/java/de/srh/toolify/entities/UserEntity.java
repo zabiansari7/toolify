@@ -53,9 +53,6 @@ public class UserEntity {
 	@Column(name = "updatedOn", columnDefinition = "datetime")
 	private Instant updatedOn;
 	
-	@Column(name = "deletedOn", columnDefinition = "datetime")
-	private Instant deletedOn;
-	
 	public Long getUserId() {
 		return userId;
 	}
@@ -160,20 +157,12 @@ public class UserEntity {
 		this.updatedOn = updatedOn;
 	}
 
-	public Instant getDeletedOn() {
-		return deletedOn;
-	}
-
-	public void setDeletedOn(Instant deletedOn) {
-		this.deletedOn = deletedOn;
-	}
-
 	@Override
 	public String toString() {
 		return "UserEntity [userId=" + userId + ", firstname=" + firstname + ", lastname=" + lastname + ", email="
 				+ email + ", password=" + password + ", hasRole=" + hasRole + ", mobile=" + mobile
 				+ ", defaultStreetName=" + defaultStreetName + ", defaultStreetNumber=" + defaultStreetNumber
 				+ ", defaultPincode=" + defaultPincode + ", defaultCity=" + defaultCity + ", createdOn=" + createdOn
-				+ ", updatedOn=" + updatedOn + ", deletedOn=" + deletedOn + "]";
+				+ ", updatedOn=" + updatedOn + "]";
 	}
 }

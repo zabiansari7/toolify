@@ -75,9 +75,6 @@ public class ProductEntity {
 	
 	@Column(name = "updatedOn", columnDefinition = "datetime")
 	private Instant updatedOn;
-	
-	@Column(name = "deletedOn", columnDefinition = "datetime")
-	private Instant deletedOn;
 
 	public Long getProductId() {
 		return productId;
@@ -222,13 +219,5 @@ public class ProductEntity {
 	public void setUpdatedOn(Instant updatedOn) {
 		this.updatedOn = updatedOn;
 	}
-
-	public Instant getDeletedOn() {
-		return deletedOn;
-	}
-
-	public void setDeletedOn(Instant deletedOn) {
-		this.deletedOn = deletedOn;
-	}
-    
+	
 }

@@ -30,9 +30,6 @@ public class CategoryEntity {
 	
 	@Column(name = "updatedOn", columnDefinition = "datetime")
 	private Instant updatedOn;
-	
-	@Column(name = "deletedOn", columnDefinition = "datetime")
-	private Instant deletedOn;
 
 	public Long getCategoryId() {
 		return categoryId;
@@ -64,14 +61,6 @@ public class CategoryEntity {
 
 	public void setUpdatedOn(Instant updatedOn) {
 		this.updatedOn = updatedOn;
-	}
-
-	public Instant getDeletedOn() {
-		return deletedOn;
-	}
-
-	public void setDeletedOn(Instant deletedOn) {
-		this.deletedOn = deletedOn;
 	}
     
 }
