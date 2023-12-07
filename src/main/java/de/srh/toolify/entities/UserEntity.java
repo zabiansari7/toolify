@@ -2,6 +2,8 @@ package de.srh.toolify.entities;
 
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class UserEntity {
     private String email;
 	
 	@Column(name = "password")
+	@JsonIgnore
     private String password;
 	
 	@Column(name = "hasRole")

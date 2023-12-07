@@ -40,12 +40,11 @@ public class PurchaseController {
 
 		try {
 			PurchasesEntity purchase = purchaseService.purchase(purchaseProps);
-			System.out.println("DONE :: " + purchase.toString());
 			return new ResponseEntity<>(new ToolifyResponse(purchase.getTotalPrice().toPlainString(), 200, HttpStatus.OK),HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(new ToolifyResponse(String.format(e.getMessage()), 500, HttpStatus.INTERNAL_SERVER_ERROR),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 }

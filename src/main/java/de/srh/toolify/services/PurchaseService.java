@@ -112,7 +112,5 @@ public class PurchaseService {
 			throw new PurchaseException(String.format("Problem in saving the purchase item with product id ''", product.getProductId()), e);
 		}
 	}
-	
-	
 
 }

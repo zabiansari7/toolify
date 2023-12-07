@@ -29,10 +29,6 @@ public class PurchasesEntity {
     @ManyToOne
     @JoinColumn(name = "userId")
     private UserEntity user;
-	
-    //@OneToMany(mappedBy = "purchaseItemsId", cascade = CascadeType.ALL)
-    //@JoinColumn(name = "purchaseItemsId")
-    //private List<PurchaseItemsEntity> purchaseItemsEntity;
 
 	public Long getPurchaseId() {
 		return purchaseId;
@@ -65,6 +61,7 @@ public class PurchasesEntity {
 	public void setUser(UserEntity user) {
 		this.user = user;
 	}
+
 
 	@Override
 	public String toString() {
