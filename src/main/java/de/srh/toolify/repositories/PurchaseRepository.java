@@ -8,6 +8,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 
 @Repository
 @Hidden
-public interface PurchasesRepository extends JpaRepository<PurchasesEntity, Long>{
+public interface PurchaseRepository extends JpaRepository<PurchasesEntity, Long>{
 
 }

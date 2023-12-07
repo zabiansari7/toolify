@@ -45,5 +45,9 @@ public class UserRegistrationService {
 		mapper.map(userProps, existingUser);
 		return userRepository.saveAndFlush(existingUser).getEmail();
 	}
+	
+	public UserEntity getUserByEmail(String email) {
+		return userRepository.findByEmail(email).orElseThrow(() -> new UserException(String.format("User with email address '%s' not found.", email), null));
+	}
 
 }

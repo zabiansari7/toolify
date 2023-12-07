@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Validated
 @Tag(name = "Products", description = "The Product APIs for admin")
-@RequestMapping("/admin/api/products")
+@RequestMapping("private/admin/api/products")
 public class ProductController {
 	
 	private final ProductService productService;
@@ -37,7 +38,11 @@ public class ProductController {
 	}
 	
 	@GetMapping(value = "/all")
-	public ResponseEntity<List<ProductEntity>> getAllProducts(){
+	public ResponseEntity<List<ProductEntity>> getAllProducts(Authentication authentication){
+		if (authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
+			return null;
+		}
 		try {
 			List<ProductEntity> products = productService.getAllProducts();
 			return new ResponseEntity<>(products, HttpStatus.OK);
