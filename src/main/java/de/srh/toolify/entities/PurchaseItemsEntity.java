@@ -29,6 +29,11 @@ public class PurchaseItemsEntity {
     @ManyToOne
     @JoinColumn(name = "productId")
     private ProductEntity productEntity;
+    
+    @ManyToOne
+    @JoinColumn(name = "purchaseId")
+    private PurchasesEntity purchase;
+
 
 	public Long getPurchaseItemsId() {
 		return purchaseItemsId;
@@ -60,6 +65,14 @@ public class PurchaseItemsEntity {
 
 	public void setProductEntity(ProductEntity productEntity) {
 		this.productEntity = productEntity;
-	}    
+	}
+
+	public PurchasesEntity getPurchase() {
+		return purchase;
+	}
+
+	public void setPurchase(PurchasesEntity purchase) {
+		this.purchase = purchase;
+	}  
 
 }

@@ -2,9 +2,7 @@ package de.srh.toolify.entities;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -33,9 +30,9 @@ public class PurchasesEntity {
     @JoinColumn(name = "userId")
     private UserEntity user;
 	
-    @OneToMany(mappedBy = "purchaseItemsId", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "purchaseItemsId", cascade = CascadeType.ALL)
     //@JoinColumn(name = "purchaseItemsId")
-    private List<PurchaseItemsEntity> purchaseItemsEntity;
+    //private List<PurchaseItemsEntity> purchaseItemsEntity;
 
 	public Long getPurchaseId() {
 		return purchaseId;
@@ -69,18 +66,10 @@ public class PurchasesEntity {
 		this.user = user;
 	}
 
-	public List<PurchaseItemsEntity> getPurchaseItemsEntity() {
-		return purchaseItemsEntity;
-	}
-
-	public void setPurchaseItemsEntity(List<PurchaseItemsEntity> purchaseItemsEntity) {
-		this.purchaseItemsEntity = purchaseItemsEntity;
-	}
-
 	@Override
 	public String toString() {
 		return "PurchasesEntity [purchaseId=" + purchaseId + ", date=" + date + ", totalPrice=" + totalPrice + ", user="
-				+ user + ", purchaseItemsEntity=" + purchaseItemsEntity + "]";
+				+ user + "]";
 	}
 
 }

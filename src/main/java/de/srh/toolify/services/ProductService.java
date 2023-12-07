@@ -16,7 +16,6 @@ import de.srh.toolify.entities.ProductEntity;
 import de.srh.toolify.exceptions.ProductException;
 import de.srh.toolify.repositories.CategoryRepository;
 import de.srh.toolify.repositories.ProductRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class ProductService {

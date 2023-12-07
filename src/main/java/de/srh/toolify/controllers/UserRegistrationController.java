@@ -57,5 +57,4 @@ public class UserRegistrationController {
 		String updatedUserEmail = userRegistrationService.updateUserByEmail(userProps, email);
 		return new ResponseEntity<>(new ToolifyResponse(String.format("User with email '%s' updated successfully", updatedUserEmail), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}
-	
 }

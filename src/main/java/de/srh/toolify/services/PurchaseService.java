@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import de.srh.toolify.entities.ProductEntity;
@@ -37,6 +38,9 @@ public class PurchaseService {
 	
 	@Autowired
 	ModelMapper mapper;
+	
+	@Autowired
+    private JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	public PurchaseService(PurchaseRepository purchaseRepository, ProductRepository productRepository, UserRepository userRepository, PurchaseItemsRepository purchaseItemsRepository) {
@@ -48,6 +52,7 @@ public class PurchaseService {
 
 	// On Cart Page just do the calculation on the frontend for showing purpose only but in reality actual calculation will happen here in business logic code.
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public PurchasesEntity purchase(Map<String, Object> purchaseProps) { // do not rely on frontend to send calculated total price of purchase items instead just use the qty and get product price from productId and multiply both. Generate total price here.
 		String loggedInEmail = purchaseProps.get("email").toString();
 		UserEntity loggedInUser = userRepository.findByEmail(loggedInEmail).orElseThrow(() -> new UserException(String.format("User with email address '%s' not found.", loggedInEmail), null));
@@ -69,10 +74,22 @@ public class PurchaseService {
 		purchase.setUser(loggedInUser);
 		purchase.setDate(Instant.now());
 		purchase.setTotalPrice(totalPrice);
-		purchase.setPurchaseItemsEntity(purchaseItemsEntities);
-		//mapper.map(purchaseProps, purchase);
+		
+		try {
+			purchaseRepository.saveAndFlush(purchase);
+			
+			for (PurchaseItemsEntity purchaseItemsEntity : purchaseItemsEntities) {
+				purchaseItemsEntity.setPurchase(purchase);
+				purchaseItemsRepository.saveAndFlush(purchaseItemsEntity);
+				
+				jdbcTemplate.update("CALL productQtyTrigger(?, ?)", purchaseItemsEntity.getProductEntity().getProductId(), purchaseItemsEntity.getQuantity());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new PurchaseException("Error in saving purchase. " + e.getMessage(), e);
+		}
 
-		return purchaseRepository.saveAndFlush(purchase);
+		return purchase;
 	}
 	
 	private PurchaseItemsEntity preparePurchaseItems(JSONObject purchaseItemsProps) {
@@ -89,8 +106,7 @@ public class PurchaseService {
 		purchaseItemsEntity.setPurchasePrice(purchasePrice);
 		
 		try {
-			return purchaseItemsRepository.saveAndFlush(purchaseItemsEntity);
-			//return purchaseItemsEntity;
+			return purchaseItemsEntity;
 		} catch (Exception e) {
 			e.printStackTrace();	
 			throw new PurchaseException(String.format("Problem in saving the purchase item with product id ''", product.getProductId()), e);
