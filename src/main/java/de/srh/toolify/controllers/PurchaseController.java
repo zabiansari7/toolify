@@ -31,7 +31,6 @@ public class PurchaseController {
 	@PostMapping
 	public ResponseEntity<ToolifyResponse> purchase(@Valid @RequestBody final Map<String, Object> purchaseProps) {
 		try {
-			purchaseProps.forEach((k, v) -> System.out.println(k + ":" + v));
 			ValidatorUtil.validate(purchaseProps, PurchasePropsValidator.class);
 		} catch (Exception e) {
 			e.printStackTrace();

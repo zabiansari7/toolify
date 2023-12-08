@@ -29,6 +29,7 @@ public class UserRegistrationService {
 	}
 
 	public String saveUser(UserEntity user) {
+		System.out.println("USER :: " + user.toString());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setHasRole("DEFAULT");
 		user.setCreatedOn(Instant.now());

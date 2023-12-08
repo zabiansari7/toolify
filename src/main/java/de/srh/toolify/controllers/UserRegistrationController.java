@@ -22,13 +22,8 @@ import jakarta.websocket.server.PathParam;
 
 @RestController
 @Validated
-@Tag(name = "Users", description = "The User APIs for registration")
+@Tag(name = "Registration", description = "The User APIs for registration")
 @RequestMapping("/public/api/users")
-
-
-
-
-
 public class UserRegistrationController {
 	
 	private final UserRegistrationService userRegistrationService;
