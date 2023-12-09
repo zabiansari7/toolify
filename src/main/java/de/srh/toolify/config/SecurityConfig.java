@@ -33,8 +33,8 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf.disable())
 			.authorizeHttpRequests(auth -> {
 				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/**")).authenticated()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/admin/**")).hasRole("ADMIN")
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/admin/**")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/v2/api-docs")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/ui")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-resources/**")).permitAll()

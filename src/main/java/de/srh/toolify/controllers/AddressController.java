@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.srh.toolify.dto.ToolifyResponse;
 import de.srh.toolify.entities.AddressEntity;
-import de.srh.toolify.entities.ProductEntity;
 import de.srh.toolify.exceptions.AddressException;
 import de.srh.toolify.services.AddressService;
 import de.srh.toolify.validators.ValidatorUtil;
@@ -31,9 +30,10 @@ public class AddressController {
 	
 	
 	@GetMapping(value = "/{addressId}")
-	    public Optional<AddressEntity> getAddressById(@PathVariable Long addressId) {
-	        return addressService.getAddressById(addressId);
-	    }
+    public ResponseEntity<AddressEntity> getAddressById(@PathVariable final Long addressId) {
+		AddressEntity address = addressService.getAddressById(addressId);
+		return new ResponseEntity<>(address, HttpStatus.OK);
+    }
 	
 	@PostMapping
 	 public ResponseEntity<ToolifyResponse> postAddress(@RequestBody final Map<String, Object> address) {
