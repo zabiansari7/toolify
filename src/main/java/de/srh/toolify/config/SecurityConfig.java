@@ -32,18 +32,16 @@ public class SecurityConfig {
 		return httpSecurity
 			.csrf(csrf -> csrf.disable())
 			.authorizeHttpRequests(auth -> {
-				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
+				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/**")).authenticated()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/admin/**")).hasRole("ADMIN")
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/v2/api-docs")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/ui")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-resources/**")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/security")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/**")).hasRole("ADMIN")
-					//.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN")
-					.anyRequest().permitAll();
-				//auth.requestMatchers(AntPathRequestMatcher.antMatcher("/admin/**")).hasRole("ADMIN");
+					.anyRequest().authenticated();
 			})
 			.formLogin(form -> form.loginPage("http://localhost:8081/login").permitAll())
 			.logout(logout -> {
@@ -55,10 +53,6 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.build();
 	}
-
-//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//    }
 	
 	
 	@Bean
@@ -67,10 +61,5 @@ public class SecurityConfig {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
-	
-//	@Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-//        return configuration.getAuthenticationManager();
-//    }
 
 }
