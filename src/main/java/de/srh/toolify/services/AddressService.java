@@ -1,6 +1,7 @@
 package de.srh.toolify.services;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,12 @@ public class AddressService {
          AddressEntity addressEntity = addressRepository.findById(id).orElseThrow(() -> new AddressException(String.format("Address not found with addressId: '%d'", id), null));
          return addressEntity;
     }
+
+	public List<AddressEntity> getAddressesByEmail(String email) {
+		UserEntity user = userRegistrationService.getUserByEmail(email);
+		List<AddressEntity> addresses = addressRepository.findByUser(user).orElseThrow(() -> new AddressException(String.format("Address not found for user with email address '%s'", email), null));
+		return addresses;
+	}
 	
 	
 	

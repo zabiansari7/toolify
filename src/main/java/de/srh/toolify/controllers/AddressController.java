@@ -1,8 +1,7 @@
 package de.srh.toolify.controllers;
 
-import java.time.Instant;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +19,7 @@ import de.srh.toolify.entities.AddressEntity;
 import de.srh.toolify.exceptions.AddressException;
 import de.srh.toolify.services.AddressService;
 import de.srh.toolify.validators.ValidatorUtil;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/private/addresses")
@@ -29,13 +29,19 @@ public class AddressController {
     private AddressService addressService;
 	
 	
-	@GetMapping(value = "/{addressId}")
+	@GetMapping(value = "/address/{addressId}")
     public ResponseEntity<AddressEntity> getAddressById(@PathVariable final Long addressId) {
 		AddressEntity address = addressService.getAddressById(addressId);
 		return new ResponseEntity<>(address, HttpStatus.OK);
     }
 	
-	@PostMapping
+	@GetMapping(params = "email")
+    public ResponseEntity<List<AddressEntity>> getAddressesByEmail(@PathParam("email") final String email) {
+		List<AddressEntity> addresses = addressService.getAddressesByEmail(email);
+		return new ResponseEntity<>(addresses, HttpStatus.OK);
+    }
+	
+	@PostMapping("/address")
 	 public ResponseEntity<ToolifyResponse> postAddress(@RequestBody final Map<String, Object> address) {
         AddressEntity addressEntity;
         try {
