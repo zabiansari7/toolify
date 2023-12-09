@@ -1,6 +1,7 @@
 package de.srh.toolify.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,4 +19,10 @@ public class UserExceptionAdvice {
 		return new ToolifyResponse(ex.getMessage(), 400, HttpStatus.BAD_REQUEST);
 	}
 	
+	@ResponseBody
+	@ExceptionHandler(BadCredentialsException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	ToolifyResponse defaultBadCredentialsExceptionHandler(BadCredentialsException ex) {
+		return new ToolifyResponse(ex.getMessage(), 401, HttpStatus.UNAUTHORIZED);
+	}
 }
