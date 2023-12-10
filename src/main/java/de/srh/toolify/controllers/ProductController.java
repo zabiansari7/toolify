@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Validated
 @Tag(name = "Products", description = "The Product APIs for admin")
-@RequestMapping("/private/admin/api/products")
+@RequestMapping("/private/admin/products")
 public class ProductController {
 	
 	private final ProductService productService;
@@ -39,10 +39,10 @@ public class ProductController {
 	
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<ProductEntity>> getAllProducts(Authentication authentication){
-		if (authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
-			return null;
-		}
+//		if (authentication.getAuthorities().stream()
+//                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN1/login"))) {
+//			return null;
+//		}
 		try {
 			List<ProductEntity> products = productService.getAllProducts();
 			return new ResponseEntity<>(products, HttpStatus.OK);
