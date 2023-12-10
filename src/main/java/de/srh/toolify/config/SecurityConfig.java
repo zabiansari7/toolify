@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import de.srh.toolify.services.UserDetailsServiceImpl;
@@ -43,7 +46,10 @@ public class SecurityConfig {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
 					.anyRequest().authenticated();
 			})
-			.formLogin(form -> form.loginPage("http://localhost:8081/login").permitAll())
+			.formLogin(form -> form.loginPage("http://localhost:8081/login")
+					//.successHandler(authenticationSuccessHandlerBean())
+					//.failureHandler(authenticationFailureHandler())
+			)			
 			.logout(logout -> {
 				logout.logoutUrl("/logout").permitAll();
 				logout.logoutSuccessUrl("/login?logout").permitAll();
@@ -54,12 +60,28 @@ public class SecurityConfig {
 			.build();
 	}
 	
+	@Bean
+    public DaoAuthenticationProvider authenticationProvider() { 
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); 
+        provider.setUserDetailsService(userDetailsService); 
+        provider.setPasswordEncoder(passwordEncoder()); 
+        return provider; 
+    } 
 	
 	@Bean
     public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider());
         return authenticationManagerBuilder.build();
     }
+	
+	@Bean
+	public AuthenticationSuccessHandler authenticationSuccessHandlerBean() {
+		return new ToolifyAuthenticationHandler();
+	}
 
+	@Bean
+	public AuthenticationFailureHandler authenticationFailureHandler() {
+		return new ToolifyFailureHandler();
+	}
 }

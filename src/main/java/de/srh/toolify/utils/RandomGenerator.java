@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 public class RandomGenerator {
 	public static int generate() {
 
@@ -21,4 +23,9 @@ public class RandomGenerator {
         }
       return random5DigitNumber;
     }
+	
+	public static String generateToken() {
+		String token = RandomStringUtils.randomAlphabetic(50).toString();
+		return token;
+	}
 }
