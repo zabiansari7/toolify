@@ -54,7 +54,7 @@ public class ProductService {
 			return productRepository.saveAndFlush(product).getProductId();
 		} catch (Exception e) {
 			e.printStackTrace();	
-			throw new ProductException("Problem in saving the product", e);
+			throw new ProductException(e.getMessage(), e);
 		}
 	}
 	

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,13 +28,19 @@ public class PurchaseHistoryController {
 	@GetMapping("/admin/purchases/history/all")
 	public ResponseEntity<List<PurchaseResponse>> getPurchaseHistoryAllUsers(){
 		List<PurchaseResponse> purchases = purchaseHistoryService.getAllPurchaseHistory();
-		return new ResponseEntity<>(purchases, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(purchases, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "purchases/history", params = "email")
 	public ResponseEntity<List<PurchaseResponse>> getPurchaseHistoryByEmail(@PathParam(value = "email") final String email){
 		List<PurchaseResponse> purchases = purchaseHistoryService.getAllPurchaseHistoryByEmail(email);
-		return new ResponseEntity<>(purchases, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(purchases, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "purchase/history/{invoice}")
+	public ResponseEntity<PurchaseResponse> getPurchaseHistoryByInvoice(@PathVariable final int invoice){
+		PurchaseResponse purchase = purchaseHistoryService.getPurchaseHistoryByInvoice(invoice);
+		return new ResponseEntity<>(purchase, HttpStatus.OK);
 	}
 
 }

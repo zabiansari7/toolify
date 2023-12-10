@@ -24,6 +24,7 @@ import de.srh.toolify.repositories.ProductRepository;
 import de.srh.toolify.repositories.PurchaseItemsRepository;
 import de.srh.toolify.repositories.PurchaseRepository;
 import de.srh.toolify.repositories.UserRepository;
+import de.srh.toolify.utils.RandomGenerator;
 import de.srh.toolify.validators.PurchaseItemsPropsValidator;
 import jakarta.transaction.Transactional;
 
@@ -74,6 +75,7 @@ public class PurchaseService {
 		purchase.setUser(loggedInUser);
 		purchase.setDate(Instant.now());
 		purchase.setTotalPrice(totalPrice);
+		purchase.setInvoice(RandomGenerator.generate());
 		
 		try {
 			purchaseRepository.saveAndFlush(purchase);

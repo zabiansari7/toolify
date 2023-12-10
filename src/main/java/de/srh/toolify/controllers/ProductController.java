@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Validated
 @Tag(name = "Products", description = "The Product APIs for admin")
-@RequestMapping("private/admin/api/products")
+@RequestMapping("/private/admin/api/products")
 public class ProductController {
 	
 	private final ProductService productService;
@@ -64,7 +64,6 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	//@ApiOperation(value = "Create a new product", notes = "Provide JSON request to create a product")
 	public ResponseEntity<ToolifyResponse> postProduct(@RequestBody final Map<String, Object> product) {
 		ProductEntity productEntity;
 		try {

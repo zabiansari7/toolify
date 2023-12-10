@@ -14,4 +14,5 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Hidden
 public interface PurchaseRepository extends JpaRepository<PurchasesEntity, Long>{
 	Optional<List<PurchasesEntity>> findByUser(UserEntity userEntity);
+	Optional<PurchasesEntity> findByInvoice(int invoice);
 }

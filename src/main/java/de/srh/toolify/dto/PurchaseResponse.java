@@ -9,11 +9,21 @@ import de.srh.toolify.entities.UserEntity;
 
 public class PurchaseResponse {
 	
+	private int purchaseId;
 	private UserEntity user;
 	private Instant date;
 	private BigDecimal totalPrice;
+	private int invoice;
 	private List<PurchaseItemsEntity> purchaseItemsEntities;
 	
+	public int getPurchaseId() {
+		return purchaseId;
+	}
+
+	public void setPurchaseId(int purchaseId) {
+		this.purchaseId = purchaseId;
+	}
+
 	public UserEntity getUser() {
 		return user;
 	}
@@ -38,6 +48,14 @@ public class PurchaseResponse {
 		this.totalPrice = totalPrice;
 	}
 	
+	public int getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(int invoice) {
+		this.invoice = invoice;
+	}
+
 	public List<PurchaseItemsEntity> getPurchaseItemsEntities() {
 		return purchaseItemsEntities;
 	}

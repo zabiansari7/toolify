@@ -29,6 +29,10 @@ public class PurchasesEntity {
     @ManyToOne
     @JoinColumn(name = "userId")
     private UserEntity user;
+    
+    @Column(name = "invoice", columnDefinition = "int", nullable = false)
+    private int invoice;
+    
 
 	public Long getPurchaseId() {
 		return purchaseId;
@@ -62,6 +66,13 @@ public class PurchasesEntity {
 		this.user = user;
 	}
 
+	public int getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(int invoice) {
+		this.invoice = invoice;
+	}
 
 	@Override
 	public String toString() {
