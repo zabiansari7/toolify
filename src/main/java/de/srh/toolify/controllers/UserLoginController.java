@@ -46,10 +46,10 @@ public class UserLoginController {
 			e.printStackTrace();
 			return new ResponseEntity<>(new ToolifyResponse(String.format(e.getMessage()), 400, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
 		}
-		UserDetails user;
+
 		Authentication authentication ;
 		try {
-			user = userDetailsServiceImpl.loadUserByUsername(login.getEmail());
+			userDetailsServiceImpl.loadUserByUsername(login.getEmail());
 			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			if (isAuthenticated(authentication)) {

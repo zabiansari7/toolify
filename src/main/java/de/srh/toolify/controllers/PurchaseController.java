@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 @RestController
 @Validated
 @Tag(name = "Purchase", description = "The Purchase APIs to buy products")
-@RequestMapping("/private/api/purchase/product")
+@RequestMapping("/private/purchase/product")
 public class PurchaseController {
 
 	@Autowired
