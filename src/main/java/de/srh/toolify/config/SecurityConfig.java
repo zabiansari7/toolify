@@ -75,13 +75,4 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 	
-	@Bean
-	public AuthenticationSuccessHandler authenticationSuccessHandlerBean() {
-		return new ToolifyAuthenticationHandler();
-	}
-
-	@Bean
-	public AuthenticationFailureHandler authenticationFailureHandler() {
-		return new ToolifyFailureHandler();
-	}
 }

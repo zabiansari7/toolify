@@ -28,7 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Validated
 @Tag(name = "Login", description = "The User API for login")
-@RequestMapping("/public/api")
+@RequestMapping("/public")
 public class UserLoginController {
 	
 	@Autowired
