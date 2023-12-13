@@ -29,7 +29,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
                 getAuthorities(user.getHasRole())
         ); 
 	}
-
 	
 	private Collection<? extends GrantedAuthority> getAuthorities(String userRole) {
 		List<GrantedAuthority> roles = new ArrayList<>();

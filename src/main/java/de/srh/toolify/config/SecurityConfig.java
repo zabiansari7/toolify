@@ -44,8 +44,8 @@ public class SecurityConfig {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/security")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
-					.anyRequest().authenticated();
-			})
+					.anyRequest().permitAll()
+;			})
 			.formLogin(form -> form.loginPage("http://localhost:8081/login")
 					//.successHandler(authenticationSuccessHandlerBean())
 					//.failureHandler(authenticationFailureHandler())

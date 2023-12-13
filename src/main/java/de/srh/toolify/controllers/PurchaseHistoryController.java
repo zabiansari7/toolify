@@ -18,7 +18,7 @@ import jakarta.websocket.server.PathParam;
 
 @RestController
 @Validated
-@Tag(name = "PurchaseHistory", description = "The Purchase History APIs for a user email and also for all users for administration purposes")
+@Tag(name = "Purchase History", description = "The Purchase History APIs for a user email and also for all users for administration purposes")
 @RequestMapping("/private")
 public class PurchaseHistoryController {
 	

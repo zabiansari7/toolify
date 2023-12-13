@@ -81,4 +81,9 @@ public class ProductService {
 			.findById(id)
 			.orElseThrow(() -> new ProductException(String.format("Category with id %d not found in the Toolify list", id), null));
 	}
+
+	public List<ProductEntity> getProductByCategoryName(String categoryName) {
+		CategoryEntity category = categoryRepository.findByCategoryName(categoryName).orElseThrow(() -> new ProductException(String.format("Category with category name '%s' not found.", categoryName), null));
+		return productRepository.findByCategory(category).orElseThrow(() -> new ProductException(String.format("Product with category name '%s' not found.", categoryName), null));
+	}
 }

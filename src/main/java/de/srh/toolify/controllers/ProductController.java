@@ -23,6 +23,7 @@ import de.srh.toolify.services.ProductService;
 import de.srh.toolify.validators.ProductPropsValidator;
 import de.srh.toolify.validators.ValidatorUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 @Validated
@@ -39,10 +40,6 @@ public class ProductController {
 	
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<ProductEntity>> getAllProducts(Authentication authentication){
-//		if (authentication.getAuthorities().stream()
-//                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN1/login"))) {
-//			return null;
-//		}
 		try {
 			List<ProductEntity> products = productService.getAllProducts();
 			return new ResponseEntity<>(products, HttpStatus.OK);
@@ -52,7 +49,7 @@ public class ProductController {
 		}	
 	}
 	
-	@GetMapping(value = "/{productId}")
+	@GetMapping(value = "/product/{productId}")
 	public ResponseEntity<ProductEntity> getProductByProductId(@PathVariable final Long productId){
 		try {
 			ProductEntity product = productService.getProductByProductId(productId);
@@ -62,6 +59,19 @@ public class ProductController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping(value = "/product", params = "categoryName")
+	public ResponseEntity<List<ProductEntity>> getProductByCategoryName(@PathParam("categoryName") final String categoryName){
+		try {
+			List<ProductEntity> products = productService.getProductByCategoryName(categoryName);
+			return new ResponseEntity<>(products, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
 	
 	@PostMapping
 	public ResponseEntity<ToolifyResponse> postProduct(@RequestBody final Map<String, Object> product) {

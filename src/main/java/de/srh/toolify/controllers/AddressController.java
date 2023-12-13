@@ -19,10 +19,12 @@ import de.srh.toolify.entities.AddressEntity;
 import de.srh.toolify.exceptions.AddressException;
 import de.srh.toolify.services.AddressService;
 import de.srh.toolify.validators.ValidatorUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/private/addresses")
+@Tag(name = "Address", description = "The Address api to manage user address")
 public class AddressController {
 	
 	@Autowired
