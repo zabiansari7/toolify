@@ -86,4 +86,9 @@ public class ProductService {
 		CategoryEntity category = categoryRepository.findByCategoryName(categoryName).orElseThrow(() -> new ProductException(String.format("Category with category name '%s' not found.", categoryName), null));
 		return productRepository.findByCategory(category).orElseThrow(() -> new ProductException(String.format("Product with category name '%s' not found.", categoryName), null));
 	}
+
+	public int getMaxQuantityByProductId(Long productId) {
+		ProductEntity productEntity = getProductByProductId(productId);
+		return productEntity.getQuantity();
+	}
 }
