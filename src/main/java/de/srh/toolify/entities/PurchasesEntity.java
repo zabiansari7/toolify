@@ -30,6 +30,10 @@ public class PurchasesEntity {
     @JoinColumn(name = "userId")
     private UserEntity user;
     
+    @ManyToOne
+    @JoinColumn(name = "addressId")
+    private AddressEntity address;
+    
     @Column(name = "invoice", columnDefinition = "int", nullable = false)
     private int invoice;
     
@@ -72,6 +76,14 @@ public class PurchasesEntity {
 
 	public void setInvoice(int invoice) {
 		this.invoice = invoice;
+	}
+	
+	public AddressEntity getAddress() {
+		return address;
+	}
+
+	public void setAddress(AddressEntity address) {
+		this.address = address;
 	}
 
 	@Override

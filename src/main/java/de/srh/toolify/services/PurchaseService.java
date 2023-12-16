@@ -13,13 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import de.srh.toolify.entities.AddressEntity;
 import de.srh.toolify.entities.ProductEntity;
 import de.srh.toolify.entities.PurchaseItemsEntity;
 import de.srh.toolify.entities.PurchasesEntity;
 import de.srh.toolify.entities.UserEntity;
+import de.srh.toolify.exceptions.AddressException;
 import de.srh.toolify.exceptions.ProductException;
 import de.srh.toolify.exceptions.PurchaseException;
 import de.srh.toolify.exceptions.UserException;
+import de.srh.toolify.repositories.AddressRepository;
 import de.srh.toolify.repositories.ProductRepository;
 import de.srh.toolify.repositories.PurchaseItemsRepository;
 import de.srh.toolify.repositories.PurchaseRepository;
@@ -36,6 +39,7 @@ public class PurchaseService {
 	private final ProductRepository productRepository;
 	private final UserRepository userRepository;
 	private final PurchaseItemsRepository purchaseItemsRepository;
+	private final AddressRepository addressRepository;
 	
 	@Autowired
 	ModelMapper mapper;
@@ -44,11 +48,12 @@ public class PurchaseService {
     private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public PurchaseService(PurchaseRepository purchaseRepository, ProductRepository productRepository, UserRepository userRepository, PurchaseItemsRepository purchaseItemsRepository) {
+	public PurchaseService(PurchaseRepository purchaseRepository, ProductRepository productRepository, UserRepository userRepository, PurchaseItemsRepository purchaseItemsRepository, AddressRepository addressRepository) {
 		this.purchaseRepository = purchaseRepository;
 		this.productRepository = productRepository;
 		this.userRepository = userRepository;
 		this.purchaseItemsRepository = purchaseItemsRepository;
+		this.addressRepository = addressRepository;
 	}
 
 	// On Cart Page just do the calculation on the frontend for showing purpose only but in reality actual calculation will happen here in business logic code.
@@ -56,7 +61,9 @@ public class PurchaseService {
 	@Transactional
 	public PurchasesEntity purchase(Map<String, Object> purchaseProps) { // do not rely on frontend to send calculated total price of purchase items instead just use the qty and get product price from productId and multiply both. Generate total price here.
 		String loggedInEmail = purchaseProps.get("email").toString();
+		Long addressId = Long.valueOf(purchaseProps.get("addressId").toString());
 		UserEntity loggedInUser = userRepository.findByEmail(loggedInEmail).orElseThrow(() -> new UserException(String.format("User with email address '%s' not found.", loggedInEmail), null));
+		AddressEntity addressEntity = addressRepository.findById(addressId).orElseThrow(() -> new AddressException(String.format("Address with addressId '%d' not found.", addressId), null));
 		
 		PurchasesEntity purchase = new PurchasesEntity();
 		List<PurchaseItemsEntity> purchaseItemsEntities = new ArrayList<>();
@@ -75,6 +82,7 @@ public class PurchaseService {
 		purchase.setUser(loggedInUser);
 		purchase.setDate(Instant.now());
 		purchase.setTotalPrice(totalPrice);
+		purchase.setAddress(addressEntity);
 		purchase.setInvoice(RandomGenerator.generate());
 		
 		try {
