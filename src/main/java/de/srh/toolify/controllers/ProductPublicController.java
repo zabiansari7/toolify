@@ -27,7 +27,7 @@ private final ProductService productService;
 	@Autowired
 	public ProductPublicController(ProductService productService) {
 		this.productService = productService;
-	}
+	} 
 	
 	@GetMapping(value = "/all")
 	public ResponseEntity<List<ProductEntity>> getAllProducts(){

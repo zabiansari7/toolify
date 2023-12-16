@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import de.srh.toolify.entities.UserEntity;
 import de.srh.toolify.services.UserDetailsServiceImpl;
 import de.srh.toolify.services.UserLoginService;
 import de.srh.toolify.utils.RandomGenerator;
+import de.srh.toolify.validators.AccessTokenValidator;
 import de.srh.toolify.validators.ValidatorUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -62,9 +64,11 @@ public class UserLoginController {
 			if (isAuthenticated(authentication)) {
 				user = userLoginService.getUser(login.getEmail());
 				loginResponse = new LoginResponse(user.getFirstname(), user.getLastname(), user.getEmail(), user.getHasRole());
-				
+				String token = RandomGenerator.generateToken();
+				System.out.println("YOUR TOKEN : " + token);
 				HttpHeaders responseHeaders = new HttpHeaders();
-				responseHeaders.add(HttpHeaders.AUTHORIZATION, RandomGenerator.generateToken());
+				responseHeaders.add(HttpHeaders.AUTHORIZATION, token);
+				AccessTokenValidator.addValidToken(token);
 				return new ResponseEntity<>( loginResponse, responseHeaders, HttpStatus.ACCEPTED);
 			} else {
 				return ResponseEntity.internalServerError().build();
@@ -74,6 +78,13 @@ public class UserLoginController {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().build();
 		}
+	}
+	
+	@GetMapping("/logout/user")
+	public ResponseEntity<?> logout(String emailString){
+		String token = AccessTokenValidator.getValidToken();
+		AccessTokenValidator.removeToken(token);
+		return null;
 	}
 	
 	private boolean isAuthenticated(Authentication authentication) {
