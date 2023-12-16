@@ -61,14 +61,27 @@ public class PurchaseService {
 	@Transactional
 	public PurchasesEntity purchase(Map<String, Object> purchaseProps) { // do not rely on frontend to send calculated total price of purchase items instead just use the qty and get product price from productId and multiply both. Generate total price here.
 		String loggedInEmail = purchaseProps.get("email").toString();
-		Long addressId = Long.valueOf(purchaseProps.get("addressId").toString());
 		UserEntity loggedInUser = userRepository.findByEmail(loggedInEmail).orElseThrow(() -> new UserException(String.format("User with email address '%s' not found.", loggedInEmail), null));
-		AddressEntity addressEntity = addressRepository.findById(addressId).orElseThrow(() -> new AddressException(String.format("Address with addressId '%d' not found.", addressId), null));
+
+		AddressEntity addressEntity;
+		if (purchaseProps.get("addressId") != null) {
+			// handle this case by adding default address.
+			Long addressId = Long.valueOf(purchaseProps.get("addressId").toString());
+			addressEntity = addressRepository.findById(addressId).orElseThrow(() -> new AddressException(String.format("Address with addressId '%d' not found.", addressId), null));
+		} else {
+			addressEntity = new AddressEntity();
+			addressEntity.setStreetName(loggedInUser.getDefaultStreetName());
+			addressEntity.setStreetNumber(Integer.valueOf(loggedInUser.getDefaultStreetNumber()));
+			addressEntity.setPostCode(Integer.valueOf(loggedInUser.getDefaultPincode().toString()));
+			addressEntity.setCityName(loggedInUser.getDefaultCity());
+			addressEntity.setCreatedOn(Instant.now());
+		}
+		
+		addressRepository.saveAndFlush(addressEntity);
 		
 		PurchasesEntity purchase = new PurchasesEntity();
 		List<PurchaseItemsEntity> purchaseItemsEntities = new ArrayList<>();
-		BigDecimal totalPrice = BigDecimal.valueOf(0);
-		
+		BigDecimal totalPrice = BigDecimal.ZERO;
 		List<PurchaseItemsPropsValidator> purchaseItems = (List<PurchaseItemsPropsValidator>) purchaseProps.get("purchaseItems");
 		JSONArray purchaseItemsArray = new JSONArray(purchaseItems);
 		
