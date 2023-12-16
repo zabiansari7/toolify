@@ -12,6 +12,7 @@ import de.srh.toolify.entities.PurchasesEntity;
 import de.srh.toolify.entities.UserEntity;
 import de.srh.toolify.exceptions.PurchaseException;
 import de.srh.toolify.exceptions.PurchaseItemsException;
+import de.srh.toolify.repositories.AddressRepository;
 import de.srh.toolify.repositories.PurchaseItemsRepository;
 import de.srh.toolify.repositories.PurchaseRepository;
 
@@ -20,13 +21,15 @@ public class PurchaseHistoryService {
 	
 	private final PurchaseRepository purchaseRepository;
 	private final PurchaseItemsRepository purchaseItemsRepository;
+	private final AddressRepository addressRepository;
 	
 	@Autowired
 	UserRegistrationService userRegistrationService;
 	
-	public PurchaseHistoryService(PurchaseRepository purchaseRepository, PurchaseItemsRepository purchaseItemsRepository) {
+	public PurchaseHistoryService(PurchaseRepository purchaseRepository, PurchaseItemsRepository purchaseItemsRepository, AddressRepository addressRepository) {
 		this.purchaseRepository = purchaseRepository;
 		this.purchaseItemsRepository = purchaseItemsRepository;
+		this.addressRepository = addressRepository;
 	}
 	
 	public List<PurchaseResponse> getAllPurchaseHistory() {
@@ -38,6 +41,7 @@ public class PurchaseHistoryService {
 			response.setUser(purchase.getUser());
 			response.setDate(purchase.getDate());
 			response.setTotalPrice(purchase.getTotalPrice());
+			response.setAddress(purchase.getAddress());
 			List<PurchaseItemsEntity> purchaseItems = purchaseItemsRepository.findByPurchase(purchase).orElseThrow(() -> new PurchaseItemsException(String.format("Purchase Item with purchaseId '%d' could not be found", purchase.getPurchaseId()), null));
 			response.setPurchaseItemsEntities(purchaseItems);
 			responses.add(response);
@@ -56,6 +60,7 @@ public class PurchaseHistoryService {
 			response.setDate(purchase.getDate());
 			response.setTotalPrice(purchase.getTotalPrice());
 			response.setInvoice(purchase.getInvoice());
+			response.setAddress(purchase.getAddress());
 			List<PurchaseItemsEntity> purchaseItems = purchaseItemsRepository.findByPurchase(purchase).orElseThrow(() -> new PurchaseItemsException(String.format("Purchase Item with purchaseId '%d' could not be found", purchase.getPurchaseId()), null));
 			response.setPurchaseItemsEntities(purchaseItems);
 			responses.add(response);
@@ -72,6 +77,7 @@ public class PurchaseHistoryService {
 		response.setDate(purchase.getDate());
 		response.setTotalPrice(purchase.getTotalPrice());
 		response.setUser(purchase.getUser());
+		response.setAddress(purchase.getAddress());
 		response.setPurchaseItemsEntities(purchaseItems);
 		return response;
 	}

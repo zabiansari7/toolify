@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
+import de.srh.toolify.entities.AddressEntity;
 import de.srh.toolify.entities.PurchaseItemsEntity;
 import de.srh.toolify.entities.UserEntity;
 
@@ -14,6 +15,7 @@ public class PurchaseResponse {
 	private Instant date;
 	private BigDecimal totalPrice;
 	private int invoice;
+	private AddressEntity address;
 	private List<PurchaseItemsEntity> purchaseItemsEntities;
 	
 	public int getPurchaseId() {
@@ -62,6 +64,14 @@ public class PurchaseResponse {
 	
 	public void setPurchaseItemsEntities(List<PurchaseItemsEntity> purchaseItemsEntities) {
 		this.purchaseItemsEntities = purchaseItemsEntities;
+	}
+
+	public AddressEntity getAddress() {
+		return address;
+	}
+
+	public void setAddress(AddressEntity address) {
+		this.address = address;
 	}
 	
 }
