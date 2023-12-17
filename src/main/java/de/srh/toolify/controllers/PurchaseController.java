@@ -39,7 +39,7 @@ public class PurchaseController {
 
 		try {
 			PurchasesEntity purchase = purchaseService.purchase(purchaseProps);
-			return new ResponseEntity<>(new ToolifyResponse(String.format("Purchase successfully created with invoice number '%d'", purchase.getInvoice()), 200, HttpStatus.OK),HttpStatus.OK);
+			return new ResponseEntity<>(new ToolifyResponse(String.format("Purchase successfully created with invoice number '%d'", purchase.getInvoice()), 201, HttpStatus.CREATED),HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(new ToolifyResponse(String.format(e.getMessage()), 500, HttpStatus.INTERNAL_SERVER_ERROR),HttpStatus.INTERNAL_SERVER_ERROR);

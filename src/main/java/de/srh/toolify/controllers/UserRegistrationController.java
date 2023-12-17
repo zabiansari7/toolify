@@ -45,16 +45,4 @@ public class UserRegistrationController {
 		String storedEmail = userRegistrationService.saveUser(userEntity);
 		return new ResponseEntity<>(new ToolifyResponse(String.format("New User with email '%s' created successfully", storedEmail), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}
-	
-	@PutMapping(value = "/user", params = "email")
-	public ResponseEntity<ToolifyResponse> editUserByEmail(@RequestBody final Map<String, Object> userProps, @PathParam(value = "email") final String email) {
-		try {
-			ValidatorUtil.validate(userProps, UserPropsValidator.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(new ToolifyResponse(String.format(e.getMessage()), 400, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
-		}
-		String updatedUserEmail = userRegistrationService.updateUserByEmail(userProps, email);
-		return new ResponseEntity<>(new ToolifyResponse(String.format("User with email '%s' updated successfully", updatedUserEmail), 201, HttpStatus.CREATED), HttpStatus.CREATED);
-	}
 }
