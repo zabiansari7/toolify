@@ -17,7 +17,6 @@ public class CategoryEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "categoryId", columnDefinition = "int")
-	@JsonIgnore
 	private Long categoryId;
 	
     @Column(name = "categoryName", nullable = false, length = 255)
