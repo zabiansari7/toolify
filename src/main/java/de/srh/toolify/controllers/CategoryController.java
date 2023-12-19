@@ -49,15 +49,15 @@ public class CategoryController {
                 new ToolifyResponse(String.format("New category with id '%d' created successfully", newId), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/category")
-	public ResponseEntity<ToolifyResponse> editCategory(@RequestBody final Map<String, Object> categoryProps){
+	@PutMapping("/category/{categoryId}")
+	public ResponseEntity<ToolifyResponse> editCategory(@RequestBody final Map<String, Object> categoryProps, @PathVariable final Long categoryId){
 		try {
 			ValidatorUtil.validate(categoryProps, CategoryPropsValidator.class);
 		} catch (Exception e) {
 			return new ResponseEntity<>(
                     new ToolifyResponse(e.getMessage(), 400, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
 		}
-		long id = categoryService.updateCategory(categoryProps);
+		long id = categoryService.updateCategory(categoryProps, categoryId);
 		return new ResponseEntity<>(
                 new ToolifyResponse(String.format("Category with id '%d' has been updated successfully", id), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}

@@ -5,29 +5,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CategoryPropsValidator {
 	
-	private String oldCategoryName;
-	private String newCategoryName;
+	private String categoryName;
 
 	@JsonCreator
-	public CategoryPropsValidator(@JsonProperty("oldCategoryName") String oldCategoryName, @JsonProperty("newCategoryName") String newCategoryName) {
-		this.oldCategoryName = oldCategoryName;
-		this.newCategoryName = newCategoryName;
+	public CategoryPropsValidator(@JsonProperty("categoryName") String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public String getCategoryName() {
-		return oldCategoryName;
+		return categoryName;
 	}
 
 	public void setCategoryName(String oldCategoryName) {
-		this.oldCategoryName = oldCategoryName;
-	}
-
-	public String getNewCategoryName() {
-		return newCategoryName;
-	}
-
-	public void setNewCategoryName(String newCategoryName) {
-		this.newCategoryName = newCategoryName;
+		this.categoryName = oldCategoryName;
 	}
 
 }

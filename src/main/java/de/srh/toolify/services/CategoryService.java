@@ -34,12 +34,11 @@ public class CategoryService {
 		return categoryRepository.saveAndFlush(categoryEntity).getCategoryId();	
 	}
 
-	public long updateCategory(Map<String, Object> categoryProps) {
-		String oldName = categoryProps.get("oldCategoryName").toString();
-		String newName = categoryProps.get("newCategoryName").toString();
-		CategoryEntity existingCategory = categoryRepository.findByCategoryName(oldName).orElseThrow(() -> new CategoryException(String.format("Category with category name '%s' not found", oldName), null));
+	public long updateCategory(Map<String, Object> categoryProps, Long categoryId) {
+		String categoryName = categoryProps.get("categoryName").toString();
+		CategoryEntity existingCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryException(String.format("Category with category id '%d' not found", categoryId), null));
 		existingCategory.setUpdatedOn(Instant.now());
-		existingCategory.setCategoryName(newName);
+		existingCategory.setCategoryName(categoryName);
 		return categoryRepository.saveAndFlush(existingCategory).getCategoryId();
 	}
 

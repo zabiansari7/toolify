@@ -12,8 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import de.srh.toolify.services.UserDetailsServiceImpl;
@@ -25,6 +23,7 @@ public class SecurityConfig {
 	@Autowired
     private UserDetailsServiceImpl userDetailsService;
 	
+
 	@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -46,10 +45,11 @@ public class SecurityConfig {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
 					.anyRequest().permitAll()
 ;			})
+			//.addFilterBefore(getAccessTokenFilter(), UsernamePasswordAuthenticationFilter.class)
 			.formLogin(form -> form.loginPage("http://localhost:8081/login")
 					//.successHandler(authenticationSuccessHandlerBean())
 					//.failureHandler(authenticationFailureHandler())
-			)			
+			)		
 			.logout(logout -> {
 				logout.logoutUrl("/logout").permitAll();
 				logout.logoutSuccessUrl("/login?logout").permitAll();
@@ -76,3 +76,4 @@ public class SecurityConfig {
     }
 	
 }
+
