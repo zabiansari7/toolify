@@ -1,35 +1,25 @@
 package de.srh.toolify.services;
 
+import de.srh.toolify.entities.*;
+import de.srh.toolify.exceptions.AddressException;
+import de.srh.toolify.exceptions.ProductException;
+import de.srh.toolify.exceptions.PurchaseException;
+import de.srh.toolify.exceptions.UserException;
+import de.srh.toolify.repositories.*;
+import de.srh.toolify.utils.RandomGenerator;
+import de.srh.toolify.validators.PurchaseItemsPropsValidator;
+import jakarta.transaction.Transactional;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-
-import de.srh.toolify.entities.AddressEntity;
-import de.srh.toolify.entities.ProductEntity;
-import de.srh.toolify.entities.PurchaseItemsEntity;
-import de.srh.toolify.entities.PurchasesEntity;
-import de.srh.toolify.entities.UserEntity;
-import de.srh.toolify.exceptions.AddressException;
-import de.srh.toolify.exceptions.ProductException;
-import de.srh.toolify.exceptions.PurchaseException;
-import de.srh.toolify.exceptions.UserException;
-import de.srh.toolify.repositories.AddressRepository;
-import de.srh.toolify.repositories.ProductRepository;
-import de.srh.toolify.repositories.PurchaseItemsRepository;
-import de.srh.toolify.repositories.PurchaseRepository;
-import de.srh.toolify.repositories.UserRepository;
-import de.srh.toolify.utils.RandomGenerator;
-import de.srh.toolify.validators.PurchaseItemsPropsValidator;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -40,10 +30,7 @@ public class PurchaseService {
 	private final UserRepository userRepository;
 	private final PurchaseItemsRepository purchaseItemsRepository;
 	private final AddressRepository addressRepository;
-	
-	@Autowired
-	ModelMapper mapper;
-	
+
 	@Autowired
     private JdbcTemplate jdbcTemplate;
 
