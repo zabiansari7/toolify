@@ -66,6 +66,6 @@ public class CategoryController {
 	public ResponseEntity<ToolifyResponse> deleteCategoryById(@PathVariable final Long categoryId) {
 		categoryService.deleteCategory(categoryId);
 		return new ResponseEntity<>(
-                new ToolifyResponse(String.format("Category with id '%d' has been deleted successfully", categoryId), 200, HttpStatus.OK), HttpStatus.OK);
+                new ToolifyResponse(String.format("Category with id '%d' has been deleted successfully", categoryId), 201, HttpStatus.CREATED), HttpStatus.CREATED);
 	}
 }
