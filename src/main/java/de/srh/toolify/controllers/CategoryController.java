@@ -29,11 +29,6 @@ public class CategoryController {
 	
 	@Autowired
 	CategoryService categoryService;
-
-	@GetMapping("/all")
-	public List<CategoryEntity> getAllCategories(){
-		return categoryService.getCategories();
-	}
 	
 	@PostMapping("/category")
 	public ResponseEntity<ToolifyResponse> postCategory(@RequestBody final Map<String, Object> category){

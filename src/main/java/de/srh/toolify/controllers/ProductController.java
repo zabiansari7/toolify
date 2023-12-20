@@ -48,17 +48,6 @@ public class ProductController {
 		}
 	}
 	
-	@GetMapping(value = "/admin/products/product", params = "categoryName")
-	public ResponseEntity<List<ProductEntity>> getProductByCategoryName(@PathParam("categoryName") final String categoryName){
-		try {
-			List<ProductEntity> products = productService.getProductByCategoryName(categoryName);
-			return new ResponseEntity<>(products, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
 	@PostMapping("/admin/products/product")
 	public ResponseEntity<ToolifyResponse> postProduct(@RequestBody final Map<String, Object> product) {
 		ProductEntity productEntity;
