@@ -64,6 +64,7 @@ public class SecurityConfig {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/security")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/error/**")).permitAll()
 					.anyRequest().authenticated();
 			})
 				.addFilterBefore(accessTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -85,8 +86,6 @@ public class SecurityConfig {
 
 	}
 
-
-
 	@Bean
 	public AuthenticationEntryPoint customAuthenticationEntryPoint() {
 		return new ToolifyLoginEntryPoint();
@@ -96,7 +95,6 @@ public class SecurityConfig {
 	public AccessTokenValidationFilter accessTokenValidationFilter(){
 		return new AccessTokenValidationFilter();
 	}
-
 
 }
 
