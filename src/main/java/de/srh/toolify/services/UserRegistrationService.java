@@ -36,15 +36,20 @@ public class UserRegistrationService {
 		try {
 			return userRepository.saveAndFlush(user).getEmail();
 		} catch (Exception e) {
-			throw new UserException(e.getCause().getLocalizedMessage(), e);
+			throw new UserException(e.getMessage(), e);
 		}
 	}
 	
 	public String updateUserByEmail(Map<String, Object> userProps, String email) {
-		UserEntity existingUser = userRepository.findByEmail(email).orElseThrow(() -> new UserException(String.format("User with email '%s' not found", email), null));
-		existingUser.setUpdatedOn(Instant.now());
-		mapper.map(userProps, existingUser);
-		return userRepository.saveAndFlush(existingUser).getEmail();
+		try {
+			UserEntity existingUser = userRepository.findByEmail(email).orElseThrow(() -> new UserException(String.format("User with email '%s' not found", email), null));
+			existingUser.setUpdatedOn(Instant.now());
+			mapper.map(userProps, existingUser);
+			return userRepository.saveAndFlush(existingUser).getEmail();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new UserException(e.getMessage(), e);
+		}
 	}
 	
 	public UserEntity getUserByEmail(String email) {

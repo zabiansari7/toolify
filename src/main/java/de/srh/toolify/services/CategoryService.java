@@ -30,21 +30,34 @@ public class CategoryService {
 	}
 	
 	public long saveCategory(CategoryEntity categoryEntity) {
-		categoryEntity.setCreatedOn(Instant.now());
-		return categoryRepository.saveAndFlush(categoryEntity).getCategoryId();	
+		try {
+			categoryEntity.setCreatedOn(Instant.now());
+			return categoryRepository.saveAndFlush(categoryEntity).getCategoryId();
+		} catch (Exception e) {
+			throw new CategoryException(e.getMessage(), e);
+		}
+
 	}
 
 	public long updateCategory(Map<String, Object> categoryProps, Long categoryId) {
-		String categoryName = categoryProps.get("categoryName").toString();
-		CategoryEntity existingCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryException(String.format("Category with category id '%d' not found", categoryId), null));
-		existingCategory.setUpdatedOn(Instant.now());
-		existingCategory.setCategoryName(categoryName);
-		return categoryRepository.saveAndFlush(existingCategory).getCategoryId();
+		try {
+			String categoryName = categoryProps.get("categoryName").toString();
+			CategoryEntity existingCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryException(String.format("Category with category id '%d' not found", categoryId), null));
+			existingCategory.setUpdatedOn(Instant.now());
+			existingCategory.setCategoryName(categoryName);
+			return categoryRepository.saveAndFlush(existingCategory).getCategoryId();
+		} catch (Exception e) {
+			throw new CategoryException(e.getMessage(), e);
+		}
 	}
 
 	public void deleteCategory(Long categoryId) {
-		CategoryEntity category = getCategoryById(categoryId);
-		categoryRepository.delete(category);
+		try {
+			CategoryEntity category = getCategoryById(categoryId);
+			categoryRepository.delete(category);
+		} catch (Exception e){
+			throw new CategoryException(e.getMessage(), e);
+		}
 	}
 	
 }

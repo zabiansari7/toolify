@@ -73,7 +73,13 @@ public class ProductService {
 	
 	public void deleteProduct(Long productId) {
 		ProductEntity existingProduct = this.getProductByProductId(productId);
-		productRepository.delete(existingProduct);
+		try {
+			productRepository.delete(existingProduct);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ProductException(e.getMessage(), e);
+		}
+
 	}
 	
 	private CategoryEntity getCategoryById(Long id) {
