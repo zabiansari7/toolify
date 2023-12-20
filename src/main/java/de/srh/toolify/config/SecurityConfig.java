@@ -1,5 +1,6 @@
 package de.srh.toolify.config;
 
+import de.srh.toolify.filters.AccessTokenValidationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import de.srh.toolify.services.UserDetailsServiceImpl;
@@ -22,7 +24,14 @@ public class SecurityConfig {
 	
 	@Autowired
     private UserDetailsServiceImpl userDetailsService;
-	
+	@Autowired
+	private AccessTokenValidationFilter accessTokenValidationFilter;
+
+	@Autowired
+	private ToolifySuccessAuthenticationHandler toolifySuccessAuthenticationHandler;
+
+	@Autowired
+	private ToolifyFailureAuthenticationHandler toolifyFailureAuthenticationHandler;
 
 	@Bean
     public PasswordEncoder passwordEncoder() {
@@ -35,7 +44,7 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf.disable())
 			.authorizeHttpRequests(auth -> {
 				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/**")).authenticated()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/**")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/admin/**")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/v2/api-docs")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/ui")).permitAll()
@@ -43,12 +52,12 @@ public class SecurityConfig {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/security")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
-					.anyRequest().permitAll()
-;			})
-			//.addFilterBefore(getAccessTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+					.anyRequest().permitAll();
+			})
+				//.addFilterBefore(accessTokenValidationFilter, UsernamePasswordAuthenticationFilter.class)
 			.formLogin(form -> form.loginPage("http://localhost:8081/login")
-					//.successHandler(authenticationSuccessHandlerBean())
-					//.failureHandler(authenticationFailureHandler())
+					.successHandler(toolifySuccessAuthenticationHandler)
+					.failureHandler(toolifyFailureAuthenticationHandler)
 			)		
 			.logout(logout -> {
 				logout.logoutUrl("/logout").permitAll();
@@ -59,7 +68,7 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.build();
 	}
-	
+
 	@Bean
     public DaoAuthenticationProvider authenticationProvider() { 
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); 

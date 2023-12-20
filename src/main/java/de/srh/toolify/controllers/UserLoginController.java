@@ -67,8 +67,8 @@ public class UserLoginController {
 				String token = RandomGenerator.generateToken();
 				System.out.println("YOUR TOKEN : " + token);
 				HttpHeaders responseHeaders = new HttpHeaders();
-				responseHeaders.add(HttpHeaders.AUTHORIZATION, token);
-				AccessTokenValidator.addValidToken(token);
+				responseHeaders.add(HttpHeaders.AUTHORIZATION, token); //Send Token to Vaadin App
+				AccessTokenValidator.addValidToken(token); //Add token to Valid Token List
 				return new ResponseEntity<>( loginResponse, responseHeaders, HttpStatus.ACCEPTED);
 			} else {
 				return ResponseEntity.internalServerError().build();
