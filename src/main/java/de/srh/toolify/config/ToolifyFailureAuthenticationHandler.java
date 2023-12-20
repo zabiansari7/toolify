@@ -16,7 +16,8 @@ public class ToolifyFailureAuthenticationHandler implements AuthenticationFailur
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-		System.out.println("FFFFFFAIIIILLLLLLLLLEDDDDDD");
+		exception.printStackTrace();
+		response.sendRedirect("http://localhost:8081/accessdenied");
 	}
 
 }

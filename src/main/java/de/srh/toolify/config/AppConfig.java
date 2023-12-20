@@ -24,9 +24,4 @@ public class AppConfig {
     public AuthenticationFailureHandler authenticationFailureHandlerBean() {
         return new ToolifyFailureAuthenticationHandler();
     }
-
-    @Bean
-    public AccessTokenValidationFilter accessTokenValidationFilter(){
-        return new AccessTokenValidationFilter();
-    }
 }

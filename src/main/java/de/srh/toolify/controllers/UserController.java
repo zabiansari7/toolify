@@ -3,12 +3,14 @@ package de.srh.toolify.controllers;
 import java.util.Map;
 
 import de.srh.toolify.filters.AccessTokenValidationFilter;
+import de.srh.toolify.utils.HelperUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,22 +38,26 @@ public class UserController {
 	UserRegistrationService userRegistrationService;
 
 	@GetMapping(value = "/user", params = "email")
-	public ResponseEntity<UserEntity> getUserByEmail(@PathParam("email") final String email, HttpServletRequest request, HttpServletResponse response){
-		try {
-			//AccessTokenValidationFilter.isIncomingTokenValid(request, response);
-			UserEntity user = userRegistrationService.getUserByEmail(email);
-			return new ResponseEntity<>(user, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	public ResponseEntity<UserEntity> getUserByEmail(@PathParam("email") final String email){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (HelperUtil.isAuthenticated(authentication)){
+			try {
+				//AccessTokenValidationFilter.isIncomingTokenValid(request, response);
+				UserEntity user = userRegistrationService.getUserByEmail(email);
+				return new ResponseEntity<>(user, HttpStatus.OK);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
+		return null;
 	}
 	
 	@PutMapping(value = "/user", params = "email")
 	public ResponseEntity<ToolifyResponse> editUserByEmail(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody final Map<String, Object> userProps, @PathParam(value = "email") final String email) {
 		try {
-			AccessTokenValidationFilter.isIncomingTokenValid(request, response);
+			//AccessTokenValidationFilter.isIncomingTokenValid(request, response);
 			ValidatorUtil.validate(userProps, UserPropsValidator.class);
 		} catch (Exception e) {
 			e.printStackTrace();
