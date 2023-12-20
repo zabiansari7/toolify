@@ -67,7 +67,7 @@ public class AddressController {
                 HttpStatus.CREATED);
     }
 			
-	 @DeleteMapping(value = "/{addressId}")
+	 @DeleteMapping(value = "/address/{addressId}")
 	    public ResponseEntity<ToolifyResponse> deleteAddress(@PathVariable final Long addressId) {
 	        try {
 	            addressService.deleteAddress(addressId);
