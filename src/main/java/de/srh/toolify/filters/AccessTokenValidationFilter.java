@@ -69,6 +69,7 @@ public class AccessTokenValidationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(ToolifyAuthentication.getEmail(), ToolifyAuthentication.getPassword()));
                 if (HelperUtil.isAuthenticated(authentication)){
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println(extractToken(request));
                 }
             }
             filterChain.doFilter(request, response);

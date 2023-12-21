@@ -87,11 +87,6 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-		return new ToolifyLoginEntryPoint();
-	}
-
-	@Bean
 	public AccessTokenValidationFilter accessTokenValidationFilter(){
 		return new AccessTokenValidationFilter();
 	}

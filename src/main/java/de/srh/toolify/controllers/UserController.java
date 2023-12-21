@@ -38,19 +38,15 @@ public class UserController {
 	UserRegistrationService userRegistrationService;
 
 	@GetMapping(value = "/user", params = "email")
-	public ResponseEntity<UserEntity> getUserByEmail(@PathParam("email") final String email){
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (HelperUtil.isAuthenticated(authentication)){
-			try {
-				//AccessTokenValidationFilter.isIncomingTokenValid(request, response);
-				UserEntity user = userRegistrationService.getUserByEmail(email);
-				return new ResponseEntity<>(user, HttpStatus.OK);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+	public ResponseEntity<UserEntity> getUserByEmail(@PathParam("email") final String email) {
+		try {
+			//AccessTokenValidationFilter.isIncomingTokenValid(request, response);
+			UserEntity user = userRegistrationService.getUserByEmail(email);
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return null;
 	}
 	
 	@PutMapping(value = "/user", params = "email")
