@@ -5,8 +5,7 @@ import java.util.List;
 
 public class ExcludedUrlsConstant {
     public static final List<String> EXCLUDED_URLS = Arrays.asList(
-            "/public/products/**",
-            "/public/categories/**",
+            "/public/**",
             "/v2/api-docs",
             "/configuration/ui",
             " /swagger-resources/**",
