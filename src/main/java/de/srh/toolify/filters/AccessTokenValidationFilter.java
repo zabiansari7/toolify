@@ -67,9 +67,12 @@ public class AccessTokenValidationFilter extends OncePerRequestFilter {
             } else {
                 Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(ToolifyAuthentication.getEmail(), ToolifyAuthentication.getPassword()));
-                if (HelperUtil.isAuthenticated(authentication)){
+                String token = extractToken(request);
+                if (HelperUtil.isAuthenticated(authentication) && token != null && AccessTokenValidator.isValidToken(token)){
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    System.out.println(extractToken(request));
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.sendRedirect("/error/accessdenied");
                 }
             }
             filterChain.doFilter(request, response);

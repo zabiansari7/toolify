@@ -9,7 +9,13 @@ public class ExcludedUrlsConstant {
             "/public/categories/**",
             "/v2/api-docs",
             "/configuration/ui",
-            " /swagger-resources/**"
+            " /swagger-resources/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/v2/api-docs/**",
+            "/swagger-resources/**",
+            "swagger-ui/**",
+            "/swagger-ui.html"
     );
 
 }

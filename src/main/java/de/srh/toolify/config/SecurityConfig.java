@@ -1,6 +1,7 @@
 package de.srh.toolify.config;
 
 import de.srh.toolify.filters.AccessTokenValidationFilter;
+import de.srh.toolify.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,17 +13,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import de.srh.toolify.services.UserDetailsServiceImpl;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
 	@Autowired
     private UserDetailsServiceImpl userDetailsService;
 	@Autowired
@@ -57,21 +54,18 @@ public class SecurityConfig {
 			.authorizeHttpRequests(auth -> {
 				auth.requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/**")).authenticated()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/admin/**")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/v2/api-docs")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/ui")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-resources/**")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/configuration/security")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
-					.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/private/admin/**")).hasAuthority("ADMIN")
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/error/**")).permitAll()
-					.anyRequest().authenticated();
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
+					.anyRequest().permitAll();
 			})
 				.addFilterBefore(accessTokenValidationFilter(), UsernamePasswordAuthenticationFilter.class)
 				//.exceptionHandling(basic -> basic.authenticationEntryPoint(customAuthenticationEntryPoint()))
+				.exceptionHandling(e -> e.accessDeniedPage("/error/accessdenied"))
 			.formLogin(form -> form.loginPage("http://localhost:8081/login").permitAll()
 					.successHandler(toolifySuccessAuthenticationHandler)
-					.successForwardUrl("http://localhost:8081/profile")
 					.failureHandler(toolifyFailureAuthenticationHandler)
 			)
 			.logout(logout -> {
