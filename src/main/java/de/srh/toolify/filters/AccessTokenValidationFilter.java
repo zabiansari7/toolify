@@ -55,34 +55,37 @@ public class AccessTokenValidationFilter extends OncePerRequestFilter {
         }
 
         try {
-			if (isLoginPageRequest(request)) {
-				LoginRequest loginRequest = getCredsFromBody(request);
-				Authentication authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            if (isLoginPageRequest(request)) {
+                LoginRequest loginRequest = getCredsFromBody(request);
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-				if (HelperUtil.isAuthenticated(authentication)) {
-					SecurityContextHolder.getContext().setAuthentication(authentication);
-					//toolifySuccessAuthenticationHandler.onAuthenticationSuccess(request,response, authentication);
-				}
-			} else {
+                if (HelperUtil.isAuthenticated(authentication)) {
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    //toolifySuccessAuthenticationHandler.onAuthenticationSuccess(request,response, authentication);
+                }
+            } else {
                 Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(ToolifyAuthentication.getEmail(), ToolifyAuthentication.getPassword()));
                 if (HelperUtil.isAuthenticated(authentication)){
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    String token = extractToken(request);
-                    if (token != null && AccessTokenValidator.isValidToken(token)) {
-                        return;
-                    } else {
-                        // Token is invalid, return unauthorized response
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.sendRedirect("/error/accessdenied");
-                    }
                 }
             }
-			filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
         } catch (AuthenticationException ex) {
             toolifyFailureAuthenticationHandler.onAuthenticationFailure(request, response, ex);
         }
+
+         /*String token = extractToken(request);
+        if (token != null && AccessTokenValidator.isValidToken(token)) {
+            // Token is valid, proceed with the request
+            //SecurityContextHolder.getContext().setAuthentication();
+            filterChain.doFilter(request, response);
+        } else {
+            // Token is invalid, return unauthorized response
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.sendRedirect("http://localhost:8081/accessdenied");
+        }*/
     }
 
     private boolean isLoginPageRequest(HttpServletRequest request) {
@@ -98,8 +101,12 @@ public class AccessTokenValidationFilter extends OncePerRequestFilter {
         try {
             ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
             String requestBody = getRequestPayload(wrappedRequest);
+
+
+            // Use a JSON library (e.g., Jackson) to parse the JSON payload
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(requestBody.toString());
+
             String email = jsonNode.get("email").asText();
             String password = jsonNode.get("password").asText();
             loginRequest.setEmail(email);
